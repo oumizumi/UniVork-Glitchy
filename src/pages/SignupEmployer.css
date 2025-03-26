@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.signup-employer-container {
+  background-color: #6c8e6e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /*fixed the sizing */
+  padding: 5rem; 
+  box-sizing: border-box; 
+}
+
+.signup-employer-box {
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 10px;
+  max-width: 90%;
+  width: 500px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 0.63rem; 
+  
+}
+
+h1 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 48px;
+  margin-bottom: 1.56rem; 
+  
+}
+
+.input-field {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-field label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #756868;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  text-align: left;
+  font-size: 14px;
+  justify-content: flex-start;
+}
+
+.checkbox-group input {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+}
+
+.checkbox-group label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+}
+
+.create-account {
+  background-color: transparent;
+  color: #769d6b;
+  border: 2px solid #769d6b;
+  padding: 10px 50px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.login-prompt {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #949090;
+}
+
+.login-prompt span {
+  color: #769d6b;
+  cursor: pointer;
+}
+
+.subtitle {
+  font-size: 0.8em; 
+  display: block; 
+  margin-top: 5px; 
+  color: #555;
+  
+}
+
+/* @media (max-height: 700px) {
+  .signup-employer-box {
+    margin-top: 50px; 
+    padding: 20px; 
+  }
+}
+
+
+ */
+
+

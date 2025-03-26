@@ -1,0 +1,23 @@
+.footer-container {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(30, 194, 93);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    opacity: 1; /* Ensure it's always visible initially */
+    visibility: visible; /* Ensure it's not hidden initially */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.footer-container.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.main-content {
+    min-height: calc(100vh - 80px); /* Ensure main content + footer fills the viewport */
+    margin-bottom: 20px; /* Avoid crowding the footer */
+}

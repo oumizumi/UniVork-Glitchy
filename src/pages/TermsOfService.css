@@ -1,0 +1,90 @@
+.terms-container {
+    min-height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.terms-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.terms-content {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.terms-content h1 {
+    color: #333;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.terms-content section {
+    margin-bottom: 2rem;
+}
+
+.terms-content h2 {
+    color: #444;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.terms-content p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.terms-actions {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.back-button {
+    padding: 0.75rem 2rem;
+    background-color: rgb(76, 175, 80);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: rgb(69, 160, 73);
+}
+
+.signup-logo {
+    color: rgb(76, 175, 80);
+    font-size: 1.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.signup-logo:hover {
+    color: rgb(69, 160, 73);
+}
+
+@media (max-width: 768px) {
+    .terms-content {
+        padding: 0 1rem;
+    }
+
+    .terms-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .terms-content h2 {
+        font-size: 1.25rem;
+    }
+}

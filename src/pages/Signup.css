@@ -1,0 +1,176 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.signup-container {
+  min-height: 100vh;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.signup-logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(76, 175, 80);
+  cursor: pointer;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: #666;
+}
+
+.language-selector span {
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.language-selector .active {
+  color: rgb(76, 175, 80);
+  font-weight: 600;
+}
+
+.language-selector span:hover:not(.divider) {
+  color: rgb(76, 175, 80);
+}
+
+.signup-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.signup-content h1 {
+  font-size: 2.5rem;
+  color: #000;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+.path-options {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;
+}
+
+.path-card {
+  flex: 1;
+  max-width: 400px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.path-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #999;
+}
+
+.icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.path-card h2 {
+  font-size: 1.5rem;
+  color: #000;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.path-card p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.login-prompt {
+  margin-top: 2rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login-link {
+  color: rgb(76, 175, 80);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.login-link:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .signup-content {
+    padding: 2rem 1rem;
+  }
+
+  .path-options {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .path-card {
+    width: 100%;
+  }
+
+  .signup-content h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-header {
+    padding: 1rem;
+  }
+
+  .signup-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .path-card {
+    padding: 1.5rem;
+  }
+}

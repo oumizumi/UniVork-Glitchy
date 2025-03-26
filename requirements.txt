@@ -1,0 +1,9 @@
+Backend:
+
+1. Cross origin resource sharing headers (corsheaders): pip install django-cors-headers
+2. Django REST Framework: pip install djangorestframework
+3. Token authentication: pip install djangorestframework-jwt
+
+Frontend:
+1. Vite/React JS Bundler: npm install vite
+2. 

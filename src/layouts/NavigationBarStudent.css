@@ -1,0 +1,213 @@
+/* Top navigation bar */
+.navigation-header {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: rgb(30, 194, 93);
+  width: 100%;
+  top: 0;
+  height: 60px;
+  /* Fixed height */
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.navigation-logo {
+  font-size: 42px;
+  /* smaller logo size */
+  font-family: 'Dangrek', sans-serif;
+  cursor: pointer;
+  padding: 30px;
+  /* Added this */
+}
+
+.navigation-bar-buttons {
+  display: flex;
+  justify-content: flex-end;
+  /* Align buttons to the right NOT NECESSARY */
+  gap: 20px;
+  /* Increased gap between buttons */
+  margin-left: auto;
+  /* Push buttons to the right */
+}
+
+.navigation-bar-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #f1f1f1;
+  color: black;
+  /* text-decoration: none; */
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.navigation-bar-button:hover {
+  background-color: lightgray;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+
+  .navigation-logo {
+    font-size: 28px;
+    /* Smaller logo */
+  }
+
+  .navigation-bar-buttons {
+    gap: 8px;
+    /* Reduce button spacing */
+  }
+
+  .navigation-bar-button {
+    width: 35px;
+    /* Smaller buttons */
+    height: 35px;
+    font-size: 10px;
+  }
+
+  .navigation-container {
+    width: 20%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .navigation-logo {
+    font-size: 24px;
+  }
+
+  .navigation-bar-buttons {
+    gap: 5px;
+    /* Minimal button spacing */
+  }
+
+  .navigation-bar-button {
+    width: 30px;
+    /* Compact buttons */
+    height: 30px;
+    font-size: 8px;
+  }
+
+  .navigation-container {
+    width: 25%;
+    /* Narrow sidebar for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+
+  .navigation-logo {
+    font-size: 20px;
+    /* Smallest logo size */
+  }
+
+  .navigation-bar-buttons {
+    gap: 3px;
+    /* Reducedd spacing between buttons */
+  }
+
+  .navigation-bar-button {
+    width: 25px;
+    height: 25px;
+    font-size: 6px;
+    /* Smallest font size */
+  }
+
+  .navigation-container {
+    display: none;
+    /* Hide the sidebar on very small screens */
+  }
+}
+
+.dashboard-nav {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #4CAF50;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-logo:hover {
+  color: #388E3C;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #4CAF50;
+}
+
+.nav-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  color: #4CAF50;
+}
+
+@media (max-width: 768px) {
+  .nav-content {
+    padding: 1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

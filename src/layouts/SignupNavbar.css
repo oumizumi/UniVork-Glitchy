@@ -1,0 +1,77 @@
+.app2 {
+    text-align: center;
+}
+
+.header2 {
+    display: flex;
+    justify-content: center;
+    /* Centers the entire navbar horizontally */
+    align-items: center;
+    /* Centers items vertically */
+    padding: 5px 10px;
+    background-color: white;
+    position: fixed;
+    /* Ensures the navbar stays at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Ensures the navbar spans the full width */
+    z-index: 1000;
+    /* Keeps it above other elements */
+}
+
+.logo {
+    font-size: 48px;
+    font-family: 'Dangrek', sans-serif;
+    margin-right: auto;
+    /* Pushes the logo to the left */
+}
+
+.auth {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Arimo', sans-serif;
+    font-size: 24px;
+    margin-left: auto;
+    /* Pushes the auth section to the right */
+}
+
+.login {
+    background-color: transparent;
+    border: 1px solid #6b8e23;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 18px;
+    color: #6b8e23;
+    transition: opacity 0.3s ease;
+}
+
+.login:hover {
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .header2 {
+        flex-wrap: wrap;
+        /* Allows wrapping on smaller screens */
+        justify-content: center;
+        /* Centers the navbar horizontally on smaller screens */
+        padding: 15px 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 2rem;
+    }
+
+    .auth {
+        font-size: 1rem;
+    }
+
+    .login {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.8rem;
+    }
+}

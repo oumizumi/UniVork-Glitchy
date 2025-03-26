@@ -1,0 +1,180 @@
+.app3 {
+    text-align: center;
+}
+
+.header3 {
+    display: flex;
+    justify-content: center;
+    /* Centers the entire navbar horizontally */
+    align-items: center;
+    /* Centers items vertically */
+    padding: 5px 10px;
+    background-color: white;
+    position: fixed;
+    /* Ensures the navbar stays at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Ensures the navbar spans the full width */
+    z-index: 1000;
+    /* Keeps it above other elements */
+}
+
+.logo2 {
+    font-size: 48px;
+    font-family: 'Dangrek', sans-serif;
+    margin-right: auto;
+    cursor: pointer;
+    /* Pushes the logo to the left */
+}
+
+.nav-bar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-logo {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4CAF50;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-logo:hover {
+    color: #388E3C;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin-left: auto;
+}
+
+.nav-links a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #4CAF50;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.language-toggle {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.language-toggle span {
+    color: #666;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.language-toggle span.active {
+    color: #333;
+    font-weight: 500;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.login-btn,
+.signup-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.login-btn {
+    color: #333;
+}
+
+.login-btn:hover {
+    color: #4CAF50;
+}
+
+.signup-btn {
+    background-color: #333;
+    color: white;
+}
+
+.signup-btn:hover {
+    background-color: #4CAF50;
+}
+
+@media (max-width: 768px) {
+    .header3 {
+        flex-wrap: wrap;
+        /* Allows wrapping on smaller screens */
+        justify-content: center;
+        /* Centers the navbar horizontally on smaller screens */
+        padding: 15px 5px;
+    }
+
+    .nav-content {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .nav-right {
+        gap: 1rem;
+    }
+
+    .nav-links a,
+    .login-btn,
+    .signup-btn {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo2 {
+        font-size: 2rem;
+    }
+
+    .nav-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .nav-right {
+        flex-direction: column;
+        align-items: center;
+    }
+}

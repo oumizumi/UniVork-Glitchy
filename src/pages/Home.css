@@ -1,0 +1,257 @@
+.landing-container {
+    min-height: 100vh;
+    background-color: white;
+}
+
+.landing-nav {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0;
+}
+
+.nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+}
+
+.nav-logo {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4CAF50;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    padding: 1rem;
+    padding-left: 2rem;
+}
+
+.nav-logo:hover {
+    color: #388E3C;
+}
+
+.nav-center {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-center a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-center a:hover {
+    color: #4CAF50;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: flex-end;
+    padding: 1rem;
+    padding-right: 2rem;
+}
+
+.language-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.language-toggle span {
+    color: #666;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.language-toggle span.active {
+    color: #333;
+    font-weight: 500;
+}
+
+.language-toggle .separator {
+    color: #ddd;
+    cursor: default;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.login-btn,
+.signup-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.login-btn {
+    color: #333;
+}
+
+.login-btn:hover {
+    color: #4CAF50;
+}
+
+.signup-btn {
+    background-color: #333;
+    color: white;
+}
+
+.signup-btn:hover {
+    background-color: #4CAF50;
+}
+
+.landing-main {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    gap: 4rem;
+}
+
+.content-section {
+    flex: 1;
+}
+
+h1 {
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    max-width: 500px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.info-card {
+    background-color: #f8f8f8;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.info-card h2 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.info-card p {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.get-started-btn {
+    display: inline-block;
+    background-color: #000;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.image-placeholder {
+    width: 748px;
+    height: 475px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+
+@media (max-width: 1024px) {
+    .landing-main {
+        flex-direction: column;
+    }
+
+    .image-placeholder {
+        width: 100%;
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .nav-center {
+        gap: 1rem;
+    }
+
+    .nav-right {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .landing-main {
+        padding: 2rem 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .nav-content,
+    .nav-center,
+    .nav-right {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-center {
+        flex-direction: column;
+    }
+
+    .language-toggle {
+        justify-content: center;
+    }
+
+    .auth-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .login-btn,
+    .signup-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

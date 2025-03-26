@@ -1,0 +1,166 @@
+.shared-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 64px;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.shared-logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.shared-logo:hover {
+    transform: translateY(-1px);
+    color: #333;
+}
+
+.shared-nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.shared-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2.5rem;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+}
+
+.nav-item {
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 1.2rem 0;
+    margin: 0 0.8rem;
+    color: #555;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #000;
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
+    transform-origin: center;
+}
+
+.nav-item:hover {
+    color: #000;
+}
+
+.nav-item:hover::after,
+.nav-item.active::after {
+    transform: scaleX(1);
+}
+
+.nav-item.active {
+    color: #000;
+    font-weight: 600;
+}
+
+.shared-auth {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.language-toggle {
+    display: flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.language-toggle:hover {
+    border-color: #000;
+    background-color: #f8f8f8;
+}
+
+.language-toggle span {
+    padding: 0 0.3rem;
+    transition: color 0.2s ease;
+}
+
+.language-toggle .divider {
+    color: #ddd;
+    padding: 0 0.2rem;
+}
+
+.language-toggle span.language-active {
+    color: #000;
+    font-weight: 600;
+}
+
+.login,
+.signup {
+    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.login {
+    background-color: transparent;
+    border: 1px solid #ddd;
+    color: #555;
+}
+
+.login:hover {
+    border-color: #000;
+    color: #000;
+    transform: translateY(-1px);
+}
+
+.signup {
+    background-color: #000;
+    color: white;
+    border: 1px solid #000;
+}
+
+.signup:hover {
+    background-color: #333;
+    border-color: #333;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}

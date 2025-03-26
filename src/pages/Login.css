@@ -1,0 +1,312 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
+
+.auth-card {
+  max-width: 400px;
+  width: 90%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.auth-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #388E3C;
+}
+
+.auth-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.auth-error {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+}
+
+.auth-footer a {
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .auth-header h1 {
+    font-size: 1.75rem;
+  }
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-box h1 {
+  margin: 0 0 1.5rem;
+  font-size: 1.75rem;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-box h1 .subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 0.5rem;
+  font-weight: normal;
+}
+
+.error-message {
+  background-color: #fee;
+  color: #e44;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  border: 1px solid #fcc;
+}
+
+.user-type-selector {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.user-type-selector label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.input-field {
+  margin-bottom: 1.25rem;
+}
+
+.input-field input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-button:hover:not(:disabled) {
+  background-color: #388E3C;
+}
+
+.login-button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.forgot-password {
+  margin-top: 1rem;
+  text-align: center;
+  color: #4CAF50;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .user-type-selector {
+    gap: 1rem;
+  }
+}
+
+.signup-prompt {
+  display: flex;
+  align-items: center;
+  margin: 1.25rem 0;
+}
+
+.signup-prompt hr {
+  flex: 1;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.signup-prompt span {
+  margin: 0 0.625rem;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  color: #949090;
+}
+
+.signup-button {
+  background-color: transparent;
+  color: #769d6b;
+  border: 2px solid #769d6b;
+  padding: 0.75rem 1.25rem;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.signup-button:hover {
+  background-color: #769d6b;
+  color: white;
+  transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .login-box {
+    padding: 2rem;
+  }
+
+  .input-field input {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+  }
+
+  .forgot-password {
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+  }
+
+  .login-button,
+  .signup-button {
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    padding: 10px 15px;
+
+  }
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    padding: 1.5rem;
+  }
+
+  .input-field input {
+    padding: 10px;
+  }
+
+  .forgot-password {
+    font-size: clamp(0.7rem, 3vw, 0.85rem);
+  }
+
+  .login-button,
+  .signup-button {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    padding: 8px 12px;
+
+  }
+}

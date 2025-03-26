@@ -1,0 +1,19 @@
+Superuser Information:
+Username is "benjamintest"
+Email is "benjamintest@randomemail.com"
+Password is "BenjaminTestPassword$500"
+
+User 1 Information:
+Username is "testuser"
+Email is "testuser@randomemail.com"
+Password is "#GoodPassword10"
+
+User 2 Information:
+Username is "secondtestuser"
+Email is "secondtestuser@randomemail.com"
+Password is "Str0ng!P@ssw0rd"
+
+Student 1 Information:
+Username is "teststudent"
+Email is "teststudent@randomemail.com"
+Password is "TestStudentPassword%500"
