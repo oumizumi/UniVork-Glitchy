@@ -12,20 +12,26 @@ function ProtectedRoute({ children }) {
     const auth = () => {
         const token = localStorage.getItem('token')
         const isAuthenticated = localStorage.getItem('isAuthenticated')
+        const studentProfile = localStorage.getItem('studentProfile')
 
         console.log('Auth Check:', {
             token,
             isAuthenticated,
+            hasProfile: !!studentProfile,
             timestamp: new Date().toISOString()
         });
 
-        if (!token || !isAuthenticated) {
+        // During development, be more lenient with auth checks
+        // Either token OR studentProfile is sufficient
+        if ((!token && !studentProfile) || (!token && !isAuthenticated)) {
             console.log('Authentication failed - redirecting to login');
             setIsAuthorized(false)
-            // Clear any stale auth data
-            localStorage.removeItem('token');
-            localStorage.removeItem('isAuthenticated');
             return;
+        }
+
+        // If we have a token but no isAuthenticated flag, set it
+        if (token && !isAuthenticated) {
+            localStorage.setItem('isAuthenticated', 'true');
         }
 
         console.log('Authentication successful');

@@ -1,12 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 
 function LandingPage() {
   const navigate = useNavigate();
+  const [language, setLanguage] = useState('EN');
 
   return (
     <div className="app">
+      <header className="header">
+        <div
+          className="logo"
+          onClick={() => navigate('/')}
+        >
+          UniVork
+        </div>
+        <nav className="nav">
+          <ul>
+            <li
+              className="nav-item"
+              onClick={() => navigate('/for-students')}
+            >
+              For students
+            </li>
+            <li
+              className="nav-item"
+              onClick={() => navigate('/for-employers')}
+            >
+              For employers
+            </li>
+            <li
+              className="nav-item"
+              onClick={() => navigate('/resources')}
+            >
+              Resources
+            </li>
+          </ul>
+        </nav>
+        <div className="auth">
+          <div className="language-toggle" onClick={() => setLanguage(prev => prev === 'EN' ? 'FR' : 'EN')}>
+            <span className={language === 'EN' ? 'language-active' : ''}>EN</span>
+            <span className="divider">|</span>
+            <span className={language === 'FR' ? 'language-active' : ''}>FR</span>
+          </div>
+          <button className="login" onClick={() => navigate('/login')}>
+            Log in
+          </button>
+          <button className="signup" onClick={() => navigate('/signup')}>
+            Sign up
+          </button>
+        </div>
+      </header>
+
       <main className="main">
         <div className="content">
           <div className="headline">

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './StudentDashboard.css';
-import NavigationBarStudent from '../layouts/NavigationBarStudent.jsx';
 import UpdateProfile from '../components/UpdateProfile.jsx';
 import StudentDashboardFooter from '../layouts/StudentDashboardFooter.jsx';
-import Motivation from '../components/Motivation.jsx';
 import SearchFilter from '../components/SearchFilter.jsx';
 import ListOfJobs from '../components/ListOfJobs.jsx';
 import JobCard from '../components/JobCard';
@@ -12,12 +10,15 @@ import JobDetails from '../components/JobDetails';
 
 const StudentDashboard = () => {
     const navigate = useNavigate();
+    const [language, setLanguage] = useState('EN');
     const [isProfileUpdated, setIsProfileUpdated] = useState(false);
     const [showInitialMessage, setShowInitialMessage] = useState(true);
     const [showForm, setShowForm] = useState(true);
     const [showTasks, setShowTasks] = useState(false);
     const [showPerformance, setShowPerformance] = useState(false);
     const [showCompanyInfo, setShowCompanyInfo] = useState(false);
+    const [showJobs, setShowJobs] = useState(false);
+    const [showApplications, setShowApplications] = useState(false);
     const [updateStatus, setUpdateStatus] = useState(null);
     const [updateMessage, setUpdateMessage] = useState('');
     const [hasAcceptedJob, setHasAcceptedJob] = useState(false);
@@ -33,6 +34,7 @@ const StudentDashboard = () => {
         gpa: '',
         universityEmail: '',
         phoneNumber: '',
+        country: '',
         city: '',
         expectedGraduationDate: '',
         resume: null
@@ -94,18 +96,72 @@ const StudentDashboard = () => {
     ]);
 
     useEffect(() => {
+        // Check if user is authenticated
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        // Make sure isAuthenticated flag is set
+        localStorage.setItem('isAuthenticated', 'true');
+
+        // Check if this is a new sign up (no profile yet)
         const savedProfile = localStorage.getItem('studentProfile');
         if (savedProfile) {
+            // If profile exists and is complete, mark as updated
             const parsedProfile = JSON.parse(savedProfile);
             setFormData(parsedProfile);
-            setIsProfileUpdated(true);
-            setShowForm(false);
+
+            // Check if profile is complete with required fields
+            const requiredFields = [
+                'fullName', 'studentNumber', 'status', 'educationLevel',
+                'university', 'major', 'academicYear', 'gpa',
+                'universityEmail', 'phoneNumber', 'country', 'city', 'expectedGraduationDate'
+            ];
+
+            const isComplete = requiredFields.every(field => parsedProfile[field] && parsedProfile[field].trim() !== '');
+
+            setIsProfileUpdated(isComplete);
+
+            // Always show the profile form first if not completed
+            setShowForm(true);
+
+            console.log("Profile loaded:", parsedProfile);
+            console.log("Profile is complete:", isComplete);
+        } else {
+            // If no profile, create a minimal one with empty values to fill
+            // This ensures we're in "phase 1" - profile setup
+            const minimalProfile = {
+                fullName: '',
+                studentNumber: '',
+                status: '',
+                educationLevel: '',
+                university: '',
+                major: '',
+                academicYear: '',
+                gpa: '',
+                universityEmail: '',
+                phoneNumber: '',
+                country: '',
+                city: '',
+                expectedGraduationDate: '',
+                resume: null
+            };
+            // Don't save the empty profile to localStorage yet
+            setFormData(minimalProfile);
+            setIsProfileUpdated(false);
+            setShowForm(true);
+            console.log("New profile setup needed");
         }
 
         // Check if user has an accepted job
         const acceptedJob = applicationStatus.find(app => app.status === 'accepted');
         setHasAcceptedJob(!!acceptedJob);
-    }, [applicationStatus]);
+
+        // Show initial message for new users
+        setShowInitialMessage(!isProfileUpdated);
+    }, [applicationStatus, navigate]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -114,7 +170,7 @@ const StudentDashboard = () => {
         const requiredFields = [
             'fullName', 'studentNumber', 'status', 'educationLevel',
             'university', 'major', 'academicYear', 'gpa',
-            'universityEmail', 'phoneNumber', 'city', 'expectedGraduationDate'
+            'universityEmail', 'phoneNumber', 'country', 'city', 'expectedGraduationDate'
         ];
 
         const missingFields = requiredFields.filter(field => !formData[field]);
@@ -126,13 +182,29 @@ const StudentDashboard = () => {
 
         // Save to localStorage
         localStorage.setItem('studentProfile', JSON.stringify(formData));
+
+        // Set profile as updated - this unlocks the other menu items
         setIsProfileUpdated(true);
-        setUpdateMessage('Profile saved successfully!');
-        setShowForm(false); // Hide the form after saving
+
+        // Show success message
+        setUpdateMessage('Profile saved successfully! You can now access job listings and applications.');
+        setUpdateStatus('success');
+
+        // Show notification for 3 seconds
+        setTimeout(() => {
+            setUpdateStatus(null);
+            setUpdateMessage('');
+        }, 3000);
+
+        console.log("Profile saved successfully");
     };
 
     const handleMenuItemClick = (item) => {
+        // Only allow navigation to other pages if profile is updated,
+        // except for the profile page itself
         if (!isProfileUpdated && item !== 'profile') {
+            // Notify the user they need to complete profile first
+            alert('Please complete your profile first to access this feature');
             return;
         }
 
@@ -141,6 +213,8 @@ const StudentDashboard = () => {
         setShowTasks(false);
         setShowPerformance(false);
         setShowCompanyInfo(false);
+        setShowJobs(false);
+        setShowApplications(false);
 
         switch (item) {
             case 'profile':
@@ -155,6 +229,12 @@ const StudentDashboard = () => {
             case 'company':
                 setShowCompanyInfo(true);
                 break;
+            case 'jobs':
+                setShowJobs(true);
+                break;
+            case 'status':
+                setShowApplications(true);
+                break;
             default:
                 break;
         }
@@ -162,35 +242,18 @@ const StudentDashboard = () => {
 
     const handleInputChange = (e) => {
         const { name, value, type, files } = e.target;
-        if (type === 'file') {
-            setFormData(prevState => ({
-                ...prevState,
-                [name]: files[0]
-            }));
-        } else {
-            setFormData(prevState => ({
-                ...prevState,
-                [name]: value
-            }));
-        }
-    };
 
-    const fillExampleData = () => {
-        setFormData({
-            fullName: 'John Michael Smith',
-            studentNumber: '1234567890',
-            status: 'student',
-            educationLevel: 'undergraduate',
-            university: 'uoft',
-            major: 'computer_science',
-            academicYear: '3',
-            gpa: '3.8',
-            universityEmail: 'john.smith@mail.utoronto.ca',
-            phoneNumber: '(647) 123-4567',
-            city: 'Toronto',
-            expectedGraduationDate: '2025-04-30',
-            resume: null // Since file input can't be programmatically set for security reasons
-        });
+        if (type === 'file' && files.length > 0) {
+            setFormData({
+                ...formData,
+                [name]: files[0]
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value
+            });
+        }
     };
 
     const handleLogoClick = () => {
@@ -432,110 +495,48 @@ const StudentDashboard = () => {
     };
 
     return (
-        <div className="dashboard-wrapper">
-            <nav className="dashboard-nav">
-                <div className="nav-left">
-                    <span
-                        className="nav-logo"
-                        onClick={handleLogoClick}
-                        role="button"
-                        aria-label="Go to home page"
-                    >
+        <div className="dashboard-container">
+            <header className="signup-header">
+                <div>
+                    <div className="signup-logo" onClick={() => navigate('/')}>
                         UniVork
-                    </span>
-                </div>
-                <div className="nav-right">
-                    <div className="nav-icons">
-                        <div className="nav-icon">
-                            <span className="material-icons-round">mail</span>
-                            <span className="badge">2</span>
-                        </div>
-                        <div className="nav-icon">
-                            <span className="material-icons-round">notifications</span>
-                            <span className="badge">3</span>
-                        </div>
-                        <div className="nav-icon">
-                            <span className="material-icons-round">emoji_events</span>
-                            <span className="badge achievement">5</span>
-                        </div>
-                        <div className="nav-icon profile">
-                            <span className="material-icons-round">account_circle</span>
-                        </div>
                     </div>
                 </div>
-            </nav>
-
-            <div className="dashboard-container">
-                <div className="dashboard-sidebar">
-                    <div className="sidebar-menu">
-                        <div
-                            className={`menu-item ${showForm ? 'active' : ''}`}
-                            onClick={() => handleMenuItemClick('profile')}
-                        >
-                            <span className="material-icons-round">person</span>
-                            {isProfileUpdated ? formData.fullName : 'Update Profile'}
-                        </div>
-                        {hasAcceptedJob ? (
-                            <>
-                                <div
-                                    className={`menu-item ${!isProfileUpdated ? 'disabled' : ''} ${showTasks ? 'active' : ''}`}
-                                    onClick={() => handleMenuItemClick('tasks')}
-                                >
-                                    <span className="material-icons-round">task</span>
-                                    Tasks
-                                </div>
-                                <div
-                                    className={`menu-item ${!isProfileUpdated ? 'disabled' : ''} ${showPerformance ? 'active' : ''}`}
-                                    onClick={() => handleMenuItemClick('performance')}
-                                >
-                                    <span className="material-icons-round">analytics</span>
-                                    Weekly Performance
-                                </div>
-                                <div
-                                    className={`menu-item ${!isProfileUpdated ? 'disabled' : ''} ${showCompanyInfo ? 'active' : ''}`}
-                                    onClick={() => handleMenuItemClick('company')}
-                                >
-                                    <span className="material-icons-round">business</span>
-                                    Company Info
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div
-                                    className={`menu-item ${!isProfileUpdated ? 'disabled' : ''}`}
-                                    onClick={() => handleMenuItemClick('jobs')}
-                                >
-                                    <span className="material-icons-round">work</span>
-                                    Apply for Jobs
-                                </div>
-                                <div
-                                    className={`menu-item ${!isProfileUpdated ? 'disabled' : ''}`}
-                                    onClick={() => handleMenuItemClick('status')}
-                                >
-                                    <span className="material-icons-round">assignment</span>
-                                    Application Status
-                                </div>
-                            </>
-                        )}
-                    </div>
+                <div className="header-icons">
+                    <span className="material-icons-round">email</span>
+                    <span className="material-icons-round">notifications</span>
+                    <span className="material-icons-round">emoji_events</span>
+                    <span className="material-icons-round">account_circle</span>
                 </div>
+            </header>
 
-                <div className="dashboard-main">
-                    {showForm && (
-                        <div className="profile-section">
-                            {!isProfileUpdated && (
-                                <div className="warning-message">
-                                    ⚠️ Update your profile to unlock the features!
-                                </div>
-                            )}
+            <div className="dashboard-content">
+                <aside className="dashboard-sidebar">
+                    <div className="sidebar-item active">
+                        <span className="material-icons-round">person</span>
+                        <span>update profile</span>
+                    </div>
+                    <div className="sidebar-item disabled">
+                        <span className="material-icons-round">work</span>
+                        <span>apply for jobs</span>
+                    </div>
+                    <div className="sidebar-item disabled">
+                        <span className="material-icons-round">description</span>
+                        <span>application status</span>
+                    </div>
+                </aside>
 
-                            {isProfileUpdated && (
-                                <div className="success-message">
-                                    ✅ Your profile is complete! You can now access all features.
-                                </div>
-                            )}
+                <main className="dashboard-main">
+                    <div className="profile-form-container">
+                        <div className="alert-box">
+                            <span className="material-icons-round">warning</span>
+                            <span>Update your profile to unlock the features!</span>
+                        </div>
 
-                            <form onSubmit={handleSubmit} className="profile-form">
+                        <div className="form-section">
+                            <h2>Update your profile to unlock the features</h2>
+
+                            <form onSubmit={handleSubmit}>
                                 <div className="form-group">
                                     <label>Full Name</label>
                                     <input
@@ -544,8 +545,6 @@ const StudentDashboard = () => {
                                         value={formData.fullName}
                                         onChange={handleInputChange}
                                         required
-                                        disabled={isProfileUpdated}
-                                        readOnly={isProfileUpdated}
                                     />
                                 </div>
 
@@ -556,9 +555,8 @@ const StudentDashboard = () => {
                                         name="studentNumber"
                                         value={formData.studentNumber}
                                         onChange={handleInputChange}
-                                        placeholder="e.g., 12345678"
-                                        disabled={isProfileUpdated}
-                                        readOnly={isProfileUpdated}
+                                        required
+                                        placeholder="e.g. 12345678"
                                     />
                                 </div>
 
@@ -569,7 +567,6 @@ const StudentDashboard = () => {
                                         value={formData.status}
                                         onChange={handleInputChange}
                                         required
-                                        disabled={isProfileUpdated}
                                     >
                                         <option value="">Select Status</option>
                                         <option value="student">Student</option>
@@ -583,7 +580,7 @@ const StudentDashboard = () => {
                                         name="educationLevel"
                                         value={formData.educationLevel}
                                         onChange={handleInputChange}
-                                        disabled={isProfileUpdated}
+                                        required
                                     >
                                         <option value="">Select Education Level</option>
                                         <option value="undergraduate">Undergraduate</option>
@@ -599,29 +596,13 @@ const StudentDashboard = () => {
                                         value={formData.university}
                                         onChange={handleInputChange}
                                         required
-                                        disabled={isProfileUpdated}
                                     >
                                         <option value="">Select University</option>
                                         <option value="uoft">University of Toronto</option>
-                                        <option value="mcgill">McGill University</option>
-                                        <option value="ubc">University of British Columbia</option>
-                                        <option value="waterloo">University of Waterloo</option>
-                                        <option value="alberta">University of Alberta</option>
-                                        <option value="mcmaster">McMaster University</option>
-                                        <option value="montreal">University of Montreal</option>
-                                        <option value="calgary">University of Calgary</option>
-                                        <option value="ottawa">University of Ottawa</option>
-                                        <option value="western">Western University</option>
-                                        <option value="queens">Queen's University</option>
-                                        <option value="york">York University</option>
+                                        <option value="yorku">York University</option>
                                         <option value="ryerson">Toronto Metropolitan University</option>
-                                        <option value="concordia">Concordia University</option>
-                                        <option value="sfu">Simon Fraser University</option>
-                                        <option value="dalhousie">Dalhousie University</option>
-                                        <option value="carleton">Carleton University</option>
-                                        <option value="victoria">University of Victoria</option>
-                                        <option value="manitoba">University of Manitoba</option>
-                                        <option value="saskatchewan">University of Saskatchewan</option>
+                                        <option value="waterloo">University of Waterloo</option>
+                                        <option value="mcgill">McGill University</option>
                                     </select>
                                 </div>
 
@@ -632,50 +613,13 @@ const StudentDashboard = () => {
                                         value={formData.major}
                                         onChange={handleInputChange}
                                         required
-                                        disabled={isProfileUpdated}
                                     >
                                         <option value="">Select Major</option>
-                                        <optgroup label="Engineering & Technology">
-                                            <option value="computer_science">Computer Science</option>
-                                            <option value="software_eng">Software Engineering</option>
-                                            <option value="electrical_eng">Electrical Engineering</option>
-                                            <option value="mechanical_eng">Mechanical Engineering</option>
-                                            <option value="civil_eng">Civil Engineering</option>
-                                            <option value="chemical_eng">Chemical Engineering</option>
-                                            <option value="industrial_eng">Industrial Engineering</option>
-                                            <option value="biomedical_eng">Biomedical Engineering</option>
-                                        </optgroup>
-                                        <optgroup label="Business & Economics">
-                                            <option value="business_admin">Business Administration</option>
-                                            <option value="finance">Finance</option>
-                                            <option value="accounting">Accounting</option>
-                                            <option value="economics">Economics</option>
-                                            <option value="marketing">Marketing</option>
-                                            <option value="hr_management">Human Resources Management</option>
-                                        </optgroup>
-                                        <optgroup label="Sciences">
-                                            <option value="biology">Biology</option>
-                                            <option value="chemistry">Chemistry</option>
-                                            <option value="physics">Physics</option>
-                                            <option value="mathematics">Mathematics</option>
-                                            <option value="statistics">Statistics</option>
-                                            <option value="environmental_science">Environmental Science</option>
-                                        </optgroup>
-                                        <optgroup label="Health Sciences">
-                                            <option value="nursing">Nursing</option>
-                                            <option value="pharmacy">Pharmacy</option>
-                                            <option value="psychology">Psychology</option>
-                                            <option value="public_health">Public Health</option>
-                                            <option value="kinesiology">Kinesiology</option>
-                                        </optgroup>
-                                        <optgroup label="Arts & Humanities">
-                                            <option value="english">English</option>
-                                            <option value="history">History</option>
-                                            <option value="philosophy">Philosophy</option>
-                                            <option value="communications">Communications</option>
-                                            <option value="political_science">Political Science</option>
-                                            <option value="sociology">Sociology</option>
-                                        </optgroup>
+                                        <option value="computer_science">Computer Science</option>
+                                        <option value="engineering">Engineering</option>
+                                        <option value="business">Business</option>
+                                        <option value="arts">Arts</option>
+                                        <option value="science">Science</option>
                                     </select>
                                 </div>
 
@@ -685,13 +629,14 @@ const StudentDashboard = () => {
                                         name="academicYear"
                                         value={formData.academicYear}
                                         onChange={handleInputChange}
-                                        disabled={isProfileUpdated}
+                                        required
                                     >
                                         <option value="">Select Academic Year</option>
-                                        <option value="1">First Year</option>
-                                        <option value="2">Second Year</option>
-                                        <option value="3">Third Year</option>
-                                        <option value="4">Fourth Year</option>
+                                        <option value="1">1st Year</option>
+                                        <option value="2">2nd Year</option>
+                                        <option value="3">3rd Year</option>
+                                        <option value="4">4th Year</option>
+                                        <option value="5+">5+ Year</option>
                                     </select>
                                 </div>
 
@@ -702,9 +647,8 @@ const StudentDashboard = () => {
                                         name="gpa"
                                         value={formData.gpa}
                                         onChange={handleInputChange}
-                                        placeholder="Enter your GPA"
-                                        disabled={isProfileUpdated}
-                                        readOnly={isProfileUpdated}
+                                        required
+                                        placeholder="e.g. 3.5"
                                     />
                                 </div>
 
@@ -715,9 +659,8 @@ const StudentDashboard = () => {
                                         name="universityEmail"
                                         value={formData.universityEmail}
                                         onChange={handleInputChange}
-                                        placeholder="firstname@students.ca"
-                                        disabled={isProfileUpdated}
-                                        readOnly={isProfileUpdated}
+                                        required
+                                        placeholder="e.g. johndoe@uottawa.ca"
                                     />
                                 </div>
 
@@ -728,9 +671,20 @@ const StudentDashboard = () => {
                                         name="phoneNumber"
                                         value={formData.phoneNumber}
                                         onChange={handleInputChange}
-                                        placeholder="Enter your phone number"
-                                        disabled={isProfileUpdated}
-                                        readOnly={isProfileUpdated}
+                                        required
+                                        placeholder="e.g. 416-123-4567"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Country</label>
+                                    <input
+                                        type="text"
+                                        name="country"
+                                        value={formData.country}
+                                        onChange={handleInputChange}
+                                        required
+                                        placeholder="e.g. Canada"
                                     />
                                 </div>
 
@@ -741,9 +695,8 @@ const StudentDashboard = () => {
                                         name="city"
                                         value={formData.city}
                                         onChange={handleInputChange}
-                                        placeholder="Enter your city"
-                                        disabled={isProfileUpdated}
-                                        readOnly={isProfileUpdated}
+                                        required
+                                        placeholder="e.g. Toronto"
                                     />
                                 </div>
 
@@ -754,266 +707,39 @@ const StudentDashboard = () => {
                                         name="expectedGraduationDate"
                                         value={formData.expectedGraduationDate}
                                         onChange={handleInputChange}
-                                        disabled={isProfileUpdated}
-                                        readOnly={isProfileUpdated}
+                                        required
+                                        placeholder="MM/DD/YYYY"
                                     />
+                                    <small className="date-format-hint">Format: MM/DD/YYYY</small>
                                 </div>
 
-                                <div className="file-upload">
-                                    <input
-                                        type="file"
-                                        className="file-input"
-                                        accept=".pdf,.doc,.docx"
-                                        onChange={handleInputChange}
-                                        name="resume"
-                                        disabled={isProfileUpdated}
-                                    />
-                                    <div className="file-label">
-                                        <span className="material-icons-round">upload_file</span>
-                                        {formData.resume ? formData.resume.name : 'Upload your resume (optional)'}
+                                <div className="form-group">
+                                    <label>Resume</label>
+                                    <div className="resume-upload-container">
+                                        <input
+                                            type="file"
+                                            name="resume"
+                                            id="resume-upload"
+                                            onChange={handleInputChange}
+                                            accept=".pdf,.doc,.docx"
+                                            className="resume-input"
+                                        />
+                                        <label htmlFor="resume-upload" className="resume-upload-label">
+                                            <span className="material-icons-round upload-icon">cloud_upload</span>
+                                            <span className="upload-text">{formData.resume ? formData.resume.name : 'Add Resume'}</span>
+                                        </label>
                                     </div>
                                 </div>
 
-                                {!isProfileUpdated && (
+                                <div className="form-actions">
                                     <button type="submit" className="submit-button">
-                                        Save Profile
+                                        <span className="material-icons-round">save</span> Save Profile
                                     </button>
-                                )}
+                                </div>
                             </form>
                         </div>
-                    )}
-
-                    {showTasks && (
-                        <div className="tasks-section">
-                            <h2>My Tasks</h2>
-                            <div className="tasks-list">
-                                {tasks.map(task => (
-                                    <div key={task.id} className={`task-card priority-${task.priority.toLowerCase()}`}>
-                                        <div className="task-header">
-                                            <h3>{task.title}</h3>
-                                            <span className={`priority-badge ${task.priority.toLowerCase()}`}>
-                                                {task.priority}
-                                            </span>
-                                        </div>
-                                        <div className="task-details">
-                                            <p>{task.description}</p>
-                                            <div className="task-meta">
-                                                <div className="deadline">
-                                                    <span className="material-icons-round">event</span>
-                                                    {task.deadline}
-                                                </div>
-                                                <div className="status">
-                                                    <span className="material-icons-round">flag</span>
-                                                    {task.status}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {showPerformance && (
-                        <div className="performance-section">
-                            <h2>Weekly Performance</h2>
-                            <div className="performance-stats">
-                                <div className="stat-card">
-                                    <span className="material-icons-round">task_alt</span>
-                                    <h3>Tasks Completed</h3>
-                                    <p>{performanceData.weeklyStats.tasksCompleted}</p>
-                                </div>
-                                <div className="stat-card">
-                                    <span className="material-icons-round">schedule</span>
-                                    <h3>Hours Logged</h3>
-                                    <p>{performanceData.weeklyStats.hoursLogged}</p>
-                                </div>
-                                <div className="stat-card">
-                                    <span className="material-icons-round">groups</span>
-                                    <h3>Meetings Attended</h3>
-                                    <p>{performanceData.weeklyStats.meetingsAttended}</p>
-                                </div>
-                                <div className="stat-card">
-                                    <span className="material-icons-round">rate_review</span>
-                                    <h3>Code Reviews</h3>
-                                    <p>{performanceData.weeklyStats.codeReviews}</p>
-                                </div>
-                            </div>
-
-                            <div className="achievements-section">
-                                <h3>Achievements</h3>
-                                <div className="achievements-list">
-                                    {performanceData.achievements.map(achievement => (
-                                        <div key={achievement.id} className="achievement-card">
-                                            <div className="achievement-icon">
-                                                <span className="material-icons-round">emoji_events</span>
-                                            </div>
-                                            <div className="achievement-content">
-                                                <h4>{achievement.title}</h4>
-                                                <p>{achievement.description}</p>
-                                                <span className="achievement-date">{achievement.date}</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="feedback-section">
-                                <h3>Recent Feedback</h3>
-                                <div className="feedback-list">
-                                    {performanceData.feedback.map(feedback => (
-                                        <div key={feedback.id} className="feedback-card">
-                                            <div className="feedback-header">
-                                                <span className="material-icons-round">person</span>
-                                                <h4>{feedback.from}</h4>
-                                                <span className="feedback-date">{feedback.date}</span>
-                                            </div>
-                                            <p>{feedback.message}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {showCompanyInfo && (
-                        <div className="company-section">
-                            <h2>Company Information</h2>
-                            <div className="company-details">
-                                <div className="company-header">
-                                    <h3>{companyInfo.name}</h3>
-                                    <p>{companyInfo.department} - {companyInfo.team}</p>
-                                </div>
-
-                                <div className="contact-cards">
-                                    <div className="contact-card">
-                                        <h4>Supervisor</h4>
-                                        <p className="name">{companyInfo.supervisor.name}</p>
-                                        <p className="title">{companyInfo.supervisor.title}</p>
-                                        <p className="email">{companyInfo.supervisor.email}</p>
-                                    </div>
-                                    <div className="contact-card">
-                                        <h4>Mentor</h4>
-                                        <p className="name">{companyInfo.mentor.name}</p>
-                                        <p className="title">{companyInfo.mentor.title}</p>
-                                        <p className="email">{companyInfo.mentor.email}</p>
-                                    </div>
-                                </div>
-
-                                <div className="info-card">
-                                    <h4>Office Location</h4>
-                                    <p><span className="material-icons-round">location_on</span> {companyInfo.officeLocation}</p>
-                                </div>
-
-                                <div className="info-card">
-                                    <h4>Work Schedule</h4>
-                                    <p><span className="material-icons-round">schedule</span> {companyInfo.workSchedule}</p>
-                                </div>
-
-                                <div className="important-links">
-                                    <h4>Important Links</h4>
-                                    <ul>
-                                        {companyInfo.importantLinks.map((link, index) => (
-                                            <li key={index}>
-                                                <a href={link.url}>
-                                                    <span className="material-icons-round">link</span>
-                                                    {link.title}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {!showForm && !showTasks && !showPerformance && !showCompanyInfo && (
-                        <div className="applications-section">
-                            <h2>Application Status</h2>
-                            <div className="applications-list">
-                                {applicationStatus.map(application => (
-                                    <div key={application.id} className={`application-card ${application.status}`}>
-                                        <div className="application-header">
-                                            <h3>{application.title}</h3>
-                                            <span className={`status-badge ${application.status}`}>
-                                                {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
-                                            </span>
-                                        </div>
-                                        <div className="application-details">
-                                            <div className="company-info">
-                                                <span className="material-icons-round">business</span>
-                                                {application.company}
-                                            </div>
-                                            <div className="location-info">
-                                                <span className="material-icons-round">location_on</span>
-                                                {application.location}
-                                            </div>
-                                            <div className="job-type">
-                                                <span className="material-icons-round">work</span>
-                                                {application.type}
-                                            </div>
-                                            <div className="salary-info">
-                                                <span className="material-icons-round">attach_money</span>
-                                                {application.salary}
-                                            </div>
-                                        </div>
-                                        <div className="application-status">
-                                            <p className="status-message">{application.statusMessage}</p>
-                                            <p className="next-steps">{application.nextSteps}</p>
-                                            <p className="applied-date">Applied on {application.appliedDate}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {showSearchFilter && showListOfJobs && (
-                        <div className="jobs-section">
-                            <div className="search-filters">
-                                <div className="search-bar">
-                                    <input
-                                        type="text"
-                                        placeholder="Search jobs..."
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
-                                    <span className="material-icons-round search-icon">search</span>
-                                </div>
-                                <div className="search-bar">
-                                    <input
-                                        type="text"
-                                        placeholder="Location"
-                                        value={locationQuery}
-                                        onChange={(e) => setLocationQuery(e.target.value)}
-                                    />
-                                    <span className="material-icons-round location-icon">location_on</span>
-                                </div>
-                            </div>
-
-                            <div className="jobs-list">
-                                {filteredJobs.map(job => (
-                                    <JobCard
-                                        key={job.id}
-                                        job={job}
-                                        onClick={() => setSelectedJob(job)}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {selectedJob && (
-                        <JobDetails
-                            job={selectedJob}
-                            onClose={() => setSelectedJob(null)}
-                            onApply={() => {
-                                alert('Application submitted successfully!');
-                                setSelectedJob(null);
-                            }}
-                        />
-                    )}
-                </div>
+                    </div>
+                </main>
             </div>
         </div>
     );

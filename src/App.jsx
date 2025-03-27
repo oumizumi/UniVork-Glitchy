@@ -2,8 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { AuthProvider } from './contexts/AuthContext';
-import NavigationBarStudent from './layouts/NavigationBarStudent';
-import NavigationBarEmployer from './layouts/NavigationBarEmployer';
+import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -31,14 +30,6 @@ function AppContent() {
 
   return (
     <div className={`app-container ${isDashboard ? 'dashboard-layout' : ''}`}>
-      {isDashboard ? (
-        location.pathname.includes('student') ? (
-          <NavigationBarStudent />
-        ) : (
-          <NavigationBarEmployer />
-        )
-      ) : null}
-
       <TransitionGroup>
         <CSSTransition
           key={location.key}
@@ -48,17 +39,23 @@ function AppContent() {
         >
           <div className={`page-container ${isDashboard ? 'dashboard-content' : ''}`}>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/signup/employer" element={<SignupEmployer />} />
-              <Route path="/signup/form" element={<SignupForm />} />
-              <Route path="/for-students" element={<ForStudents />} />
-              <Route path="/for-employers" element={<ForEmployers />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/employer-terms" element={<EmployerTerms />} />
-              <Route path="/student-terms" element={<StudentTerms />} />
-              <Route path="/terms" element={<TermsOfService />} />
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/signup/employer" element={<SignupEmployer />} />
+                <Route path="/signup/form" element={<SignupForm />} />
+                <Route path="/for-students" element={<ForStudents />} />
+                <Route path="/for-employers" element={<ForEmployers />} />
+                <Route path="/resources" element={<Resources />} />
+                <Route path="/employer-terms" element={<EmployerTerms />} />
+                <Route path="/student-terms" element={<StudentTerms />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/verify-otp" element={<VerifyOTP />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/forbidden" element={<Forbidden />} />
+              </Route>
               <Route
                 path="/studentdashboard/*"
                 element={
@@ -75,10 +72,6 @@ function AppContent() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/verify-otp" element={<VerifyOTP />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/forbidden" element={<Forbidden />} />
             </Routes>
           </div>
         </CSSTransition>

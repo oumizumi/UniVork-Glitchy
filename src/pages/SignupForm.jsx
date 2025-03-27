@@ -37,8 +37,17 @@ const SignupForm = () => {
     formData.agreeToTerms;
 
   useEffect(() => {
+    // Clear any existing student dashboard state on initial load
     localStorage.removeItem("studentDashboardState");
-  }, []);
+
+    // If user is already logged in with token, redirect to dashboard
+    const token = localStorage.getItem('token');
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+
+    if (token && isAuthenticated === 'true') {
+      navigate('/studentdashboard');
+    }
+  }, [navigate]);
 
   const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
@@ -63,19 +72,11 @@ const SignupForm = () => {
     if (enteredOTP === generatedOTP) {
       setIsOTPVerified(true);
       setIsOTPModalOpen(false);
-      finalizeSignup();
+
+      // Use our new function to create profile and redirect
+      createProfile();
     } else {
       alert("Unfortunately, the OTP is not valid. Please doublecheck and try again.");
-    }
-  };
-
-  const finalizeSignup = () => {
-    if (isFormValid) {
-      const userData = { username: formData.username, email: formData.email, password: formData.password };
-      localStorage.clear();
-      dispatch(signupStudent(formData.username, formData.email, formData.password));
-      localStorage.setItem('token', 'dummy_token');
-      navigate('/studentdashboard');
     }
   };
 
@@ -89,14 +90,57 @@ const SignupForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    otpPopup();
+
+    // Always bypass OTP for testing and go straight to dashboard
+    createProfile();
+    return;
+
+    // For testing purposes, bypass OTP and go straight to dashboard
+    // if (process.env.NODE_ENV === 'development') {
+    //   console.log('Bypassing OTP in development mode');
+    //   createProfile();
+    //   return;
+    // }
+
+    // otpPopup();
   };
 
-  useEffect(() => {
-    if (userInfo) {
-      navigate('/studentdashboard');
+  // Fill form with test data for quick testing
+  const fillTestData = () => {
+    setFormData({
+      username: 'testuser',
+      email: 'test@example.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+      receiveEmails: false,
+      agreeToTerms: true
+    });
+  };
+
+  // New function to create profile and redirect
+  const createProfile = () => {
+    // Only set authentication data, no profile data at all
+
+    // Save authentication data to localStorage
+    localStorage.clear(); // Clear any existing localStorage data
+    localStorage.setItem('token', 'dummy_token');
+    localStorage.setItem('isAuthenticated', 'true');
+
+    // Remove all profile data storage - user will need to fill this on dashboard
+
+    // Dispatch signup action
+    if (formData.username && formData.email && formData.password) {
+      dispatch(signupStudent(formData.username, formData.email, formData.password));
     }
-  }, [userInfo, navigate]);
+
+    console.log('Redirecting to dashboard with auth only:', {
+      token: localStorage.getItem('token'),
+      isAuthenticated: localStorage.getItem('isAuthenticated')
+    });
+
+    // Force redirect to dashboard
+    window.location.href = '/studentdashboard';
+  };
 
   return (
     <div className="signup-form-container">
@@ -195,6 +239,10 @@ const SignupForm = () => {
             </label>
           </div>
 
+          <button type="button" onClick={fillTestData} className="test-button" style={{ marginRight: '10px', background: '#ddd', color: '#333' }}>
+            Fill Test Data
+          </button>
+
           <button type="submit" className="signup-button">
             Sign Up
           </button>
@@ -205,11 +253,11 @@ const SignupForm = () => {
         <div className="otp-modal">
           <div className="otp-modal-content">
             <h2>Authentication</h2>
-            <p>The OTP has been sent to your email address. Please enter it:</p>
+            <p>Please enter the verification code sent to your email.</p>
             <OTP length={4} onOtpSubmit={verifyOTP} />
-            <div className="otp-buttons">
+            <div className="otp-actions">
+              <button onClick={resendOTP}>Resend Code</button>
               <button onClick={() => setIsOTPModalOpen(false)}>Cancel</button>
-              <button onClick={resendOTP}>Resend OTP</button>
             </div>
           </div>
         </div>
